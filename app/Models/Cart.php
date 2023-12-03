@@ -17,7 +17,6 @@ class Cart extends Model
     public const
         TABLE = 'carts',
         ID = 'id',
-        ITEMS = 'items',
         TOTAL_QTY = 'total_qty',
         TOTAL_PRICE = 'total_price';
 
@@ -30,6 +29,22 @@ class Cart extends Model
 
     public function items(): HasMany
     {
-        return $this->hasMany(CartItem::class, CartItem::CART_ID, self::ITEMS);
+        return $this->hasMany(CartItem::class);
+    }
+
+    public function collectTotals(): void
+    {
+        $this->refresh();
+
+        $totalQty = 0;
+        $totalPrice = 0;
+        foreach ($this->items as $item) {
+            $totalQty += $item->qty;
+            $totalPrice += $item->final_price;
+        }
+
+        $this->total_qty = $totalQty;
+        $this->total_price = $totalPrice;
+        $this->save();
     }
 }

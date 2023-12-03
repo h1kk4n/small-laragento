@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function (\Illuminate\Http\Request $request) {
-    if ($cartId = $request->cookie('cart_id')) {
+    if ($cartId = $request->cookie(\App\Http\Controllers\CartController::CART_ID_COOKIE)) {
         $cart = \App\Models\Cart::find($cartId);
     }
     return view('index', [
@@ -22,3 +22,9 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         'cart'     => $cart ?? null
     ]);
 });
+
+Route::controller(\App\Http\Controllers\CartController::class)
+    ->prefix('/cart')
+    ->group(function () {
+        Route::post('/', 'store');
+    });

@@ -20,9 +20,7 @@ class CartItem extends Model
         TABLE = 'cart_items',
         ID = 'id',
         CART_ID = 'cart_id',
-        CART = 'cart',
         PRODUCT_ID = 'product_id',
-        PRODUCT = 'product',
         QTY = 'qty',
         FINAL_PRICE = 'final_price';
 
@@ -34,11 +32,11 @@ class CartItem extends Model
 
     public function cart(): BelongsTo
     {
-        return $this->belongsTo(Cart::class, Cart::ID, self::CART);
+        return $this->belongsTo(Cart::class);
     }
 
     public function product(): BelongsTo
     {
-        return $this->belongsTo(Product::class, Product::ID, self::PRODUCT);
+        return $this->belongsTo(Product::class);
     }
 }

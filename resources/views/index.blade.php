@@ -29,8 +29,21 @@
                     @if (!$products->isEmpty())
                         @foreach ($products as $product)
                             <div class="product">
-                                <div class="product-name">{{ $product->name }} (SKU: {{ $product->sku }})</div>
-                                <div class="product-price">{{ round($product->price, 2) }}</div>
+                                <div class="product-info">
+                                    <div class="product-name">{{ $product->name }} (SKU: {{ $product->sku }})</div>
+                                    <div class="product-price">
+                                        Price: <span class="product-price-value">{{ round($product->price, 2) }}</span>
+                                    </div>
+                                </div>
+                                <div class="product-actions">
+                                    <form method="POST" action="/cart">
+                                        @csrf
+                                        <input type="hidden" name="product-id" value="{{ $product->id }}">
+                                        <button type="submit"
+                                                class="product-add-button"
+                                        >Add</button>
+                                    </form>
+                                </div>
                             </div>
                         @endforeach
                     @else

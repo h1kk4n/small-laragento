@@ -30,10 +30,31 @@
     border-radius: 20px;
 }
 
+.product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
 .product-name {
     font-style: italic;
 }
 
-.product-price {
+.product-price-value {
     font-weight: bold;
+}
+
+.product-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.product-add-button {
+    font-size: 14pt;
+    color: black;
+    background-color: lightgreen;
+    padding: 10px 20px;
+    border: 1px solid dimgrey;
+    border-radius: 10px;
 }
