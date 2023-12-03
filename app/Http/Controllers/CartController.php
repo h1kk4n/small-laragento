@@ -63,7 +63,7 @@ class CartController extends Controller
 
     private function getCart(Request $request): Cart
     {
-        $cartId = $request->cookie(self::CART_ID_COOKIE); // Change
+        $cartId = $request->cookie(self::CART_ID_COOKIE);
         return $this->cartManagement->getCart($cartId);
     }
 
