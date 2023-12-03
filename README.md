@@ -2,6 +2,10 @@
 
 ## Local deploy
 
+### Requirements
+- PHP 8.1
+- docker + docker-compose
+
 ### Installation and first start
 ```shell
 $ composer install
@@ -17,3 +21,7 @@ $ php artisan serve
 $ docker-compose up -d
 $ php artian serve
 ```
+
+### Console commands
+
+- ***php artisan laragento:generate:products*** - generate 20 random products in database 
