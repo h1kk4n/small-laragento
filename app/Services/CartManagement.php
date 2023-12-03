@@ -11,8 +11,8 @@ class CartManagement
 {
     public function getCart(int $cartId = null): Cart
     {
-        if ($cartId) {
-            return Cart::findOrFail($cartId);
+        if ($cartId && $cart = Cart::find($cartId)) {
+            return $cart;
         } else {
             $cart = new Cart;
             $cart->save();
@@ -44,7 +44,12 @@ class CartManagement
         }
 
         $increment ? $item->qty++ : $item->qty--;
-        $item->save();
+
+        if ($item->qty > 0) {
+            $item->save();
+        } else {
+            $item->delete();
+        }
         $cart->collectTotals();
     }
 
@@ -57,6 +62,10 @@ class CartManagement
         }
         $item->delete();
         $cart->collectTotals();
+    }
 
+    public function placeOrder(Cart $cart): void
+    {
+        $cart->delete(); // Properly it should create order from cart, but the point is cart logic
     }
 }

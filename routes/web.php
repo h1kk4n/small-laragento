@@ -29,4 +29,5 @@ Route::controller(\App\Http\Controllers\CartController::class)
         Route::post('', 'store');
         Route::put('{id}', 'update');
         Route::delete('{id}', 'destroy');
+        Route::post('order', 'placeOrder');
     });

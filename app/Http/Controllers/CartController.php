@@ -21,6 +21,14 @@ class CartController extends Controller
     ) {
     }
 
+    public function placeOrder(Request $request): RedirectResponse
+    {
+        $cart = $this->getCart($request);
+        $this->cartManagement->placeOrder($cart);
+
+        return redirect('/')->withoutCookie(self::CART_ID_COOKIE);
+    }
+
     public function store(Request $request): RedirectResponse
     {
         $request->validate([self::PRODUCT_ID => 'required|numeric']);

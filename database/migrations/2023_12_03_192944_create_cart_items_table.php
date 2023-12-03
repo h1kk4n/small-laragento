@@ -19,8 +19,16 @@ return new class extends Migration
             $table->float(CartItem::FINAL_PRICE)->nullable(false);
             $table->timestamps();
 
-            $table->foreign(CartItem::CART_ID)->references(Cart::ID)->on(Cart::TABLE);
-            $table->foreign(CartItem::PRODUCT_ID)->references(Product::ID)->on(Product::TABLE);
+            $table->foreign(CartItem::CART_ID)
+                ->references(Cart::ID)
+                ->on(Cart::TABLE)
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();
+            $table->foreign(CartItem::PRODUCT_ID)
+                ->references(Product::ID)
+                ->on(Product::TABLE)
+                ->cascadeOnUpdate()
+                ->cascadeOnDelete();;
         });
     }
 
