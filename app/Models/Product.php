@@ -17,10 +17,14 @@ class Product extends Model
     use HasFactory;
 
     public const
+        TABLE = 'products',
         ID = 'id',
         NAME = 'name',
         SKU = 'sku',
         PRICE = 'price';
+
+    protected $table = self::TABLE;
+    protected $primaryKey = self::ID;
 
     protected static function newFactory(): ProductFactory
     {
