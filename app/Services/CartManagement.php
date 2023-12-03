@@ -23,22 +23,22 @@ class CartManagement
     public function addProduct(Cart $cart, Product $product): void
     {
         /** @var CartItem|null $existingItem */
-        $cartItem = $cart->items->keyBy(CartItem::PRODUCT_ID)->get($product->id);
-        if (!$cartItem) {
-            $cartItem = new CartItem;
-            $cartItem->product_id = $product->id;
-            $cartItem->final_price = $product->price;
+        $item = $cart->items->keyBy(CartItem::PRODUCT_ID)->get($product->id);
+        if (!$item) {
+            $item = new CartItem;
+            $item->product_id = $product->id;
+            $item->final_price = $product->price;
         } else {
-            $cartItem->qty++;
+            $item->qty++;
         }
-        $cart->items()->save($cartItem);
+        $cart->items()->save($item);
         $cart->collectTotals();
     }
 
     public function updateQty(Cart $cart, int $itemId, bool $increment): void
     {
         /** @var CartItem $item */
-        $item = $cart->items->keyBy(CartItem::ID)->get($itemId);
+        $item = $cart->items->find($itemId);
         if (!$item) {
             throw new \InvalidArgumentException("Cart item with id = {$itemId} not found");
         }
@@ -46,5 +46,17 @@ class CartManagement
         $increment ? $item->qty++ : $item->qty--;
         $item->save();
         $cart->collectTotals();
+    }
+
+    public function removeItem(Cart $cart, int $itemId): void
+    {
+        /** @var CartItem $item */
+        $item = $cart->items->find($itemId);
+        if (!$item) {
+            throw new \InvalidArgumentException("Cart item with id = {$itemId} not found");
+        }
+        $item->delete();
+        $cart->collectTotals();
+
     }
 }

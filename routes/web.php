@@ -24,8 +24,9 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
 });
 
 Route::controller(\App\Http\Controllers\CartController::class)
-    ->prefix('/cart')
+    ->prefix('cart')
     ->group(function () {
-        Route::post('/', 'store');
-        Route::put('/{id}', 'update');
+        Route::post('', 'store');
+        Route::put('{id}', 'update');
+        Route::delete('{id}', 'destroy');
     });

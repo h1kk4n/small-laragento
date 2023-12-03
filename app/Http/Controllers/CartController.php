@@ -32,7 +32,7 @@ class CartController extends Controller
         return redirect('/')->withCookie(cookie(self::CART_ID_COOKIE, $cart->id, self::COOKIE_LIFETIME));
     }
 
-    public function update(Request $request, string $id): RedirectResponse
+    public function update(Request $request, int $id): RedirectResponse
     {
         $request->validate([
             self::QTY_INCREMENT => 'required|boolean'
@@ -45,9 +45,12 @@ class CartController extends Controller
         return $this->getResponse($cart);
     }
 
-    public function destroy(string $id)
+    public function destroy(Request $request, int $id): RedirectResponse
     {
-        //
+        $cart = $this->getCart($request);
+        $this->cartManagement->removeItem($cart, $id);
+
+        return $this->getResponse($cart);
     }
 
     private function getCart(Request $request): Cart
