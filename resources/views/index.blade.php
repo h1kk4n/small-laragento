@@ -58,18 +58,34 @@
                                 <div class="cart-item">
                                     <div class="cart-item-info">
                                         <div class="cart-item-name">{{ $item->product->name }}</div>
-                                        <div class="cart-item-qty">x {{ $item->qty }}</div>
+                                        <div class="cart-item-price">Price: {{ $item->final_price }} RUB</div>
                                     </div>
-                                    <div class="cart-item-summary">
-                                        <div class="cart-item-price">{{ $item->final_price }} RUB</div>
+                                    <div class="cart-item-actions">
+                                        <form method="POST" action="/cart/{{ $item->id }}">
+                                            @method('put')
+                                            @csrf
+                                            <input type="hidden" name="qty-increment" value="0">
+                                            <button class="decrease-qty">-</button>
+                                        </form>
+                                        <div class="cart-item-qty">{{ $item->qty }}</div>
+                                        <form method="POST" action="/cart/{{ $item->id }}">
+                                            @method('put')
+                                            @csrf
+                                            <input type="hidden" name="qty-increment" value="1">
+                                            <button class="increase-qty">+</button>
+                                        </form>
+                                        <form method="POST" action="/cart/{{ $item->id }}">
+                                            @method('delete')
+                                            @csrf
+                                            <button class="remove-item">x</button>
+                                        </form>
                                     </div>
                                 </div>
                             @endforeach
                             <hr>
                             <div class="cart-total">
                                 <div class="cart-item-info">
-                                    <div class="cart-total-name">Total: </div>
-                                    <div class="cart-total-qty">{{ $cart->total_qty }} items</div>
+                                    <div class="cart-total-qty">Total: {{ $cart->total_qty }} items</div>
                                 </div>
                                 <div class="cart-total-summary">
                                     <div class="cart-total-price">{{ $cart->total_price }} RUB</div>
