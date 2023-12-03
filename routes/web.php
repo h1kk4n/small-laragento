@@ -13,6 +13,21 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index', ['products' => \App\Models\Product::all()]);
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    if ($cartId = $request->cookie(\App\Http\Controllers\CartController::CART_ID_COOKIE)) {
+        $cart = \App\Models\Cart::find($cartId);
+    }
+    return view('index', [
+        'products' => \App\Models\Product::all(),
+        'cart'     => $cart ?? null
+    ]);
 });
+
+Route::controller(\App\Http\Controllers\CartController::class)
+    ->prefix('cart')
+    ->group(function () {
+        Route::post('', 'store');
+        Route::put('{id}', 'update');
+        Route::delete('{id}', 'destroy');
+        Route::post('order', 'placeOrder');
+    });
