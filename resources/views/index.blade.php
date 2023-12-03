@@ -1,7 +1,8 @@
 @php
-    /**
-     * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Product> $products
-     */
+/**
+ * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Product> $products
+ * @var \App\Models\Cart|null $cart
+ */
 @endphp
 
 <!DOCTYPE html>
@@ -23,7 +24,8 @@
     <body>
         <main class="content">
             <div class="container">
-                <section class="products-list">
+                <section class="product-list">
+                    <h3>Product list:</h3>
                     @if (!$products->isEmpty())
                         @foreach ($products as $product)
                             <div class="product">
@@ -32,8 +34,38 @@
                             </div>
                         @endforeach
                     @else
-                        <div class="no-products">No products yet.</div>
+                        <div class="no-products">No products yet</div>
                     @endif
+                </section>
+                <section class="cart">
+                    <h3 class="cart-header">Your cart:</h3>
+                    <div class="cart-items">
+                        @if ($cart?->items->count())
+                            @foreach ($cart->items as $item)
+                                <div class="cart-item">
+                                    <div class="cart-item-info">
+                                        <div class="cart-item-name">{{ $item->product->name }}</div>
+                                        <div class="cart-item-qty">x {{ $item->qty }}</div>
+                                    </div>
+                                    <div class="cart-item-summary">
+                                        <div class="cart-item-price">{{ $item->final_price }} RUB</div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            <hr>
+                            <div class="cart-total">
+                                <div class="cart-item-info">
+                                    <div class="cart-total-name">Total: </div>
+                                    <div class="cart-total-qty">{{ $cart->total_qty }} items</div>
+                                </div>
+                                <div class="cart-total-summary">
+                                    <div class="cart-total-price">{{ $cart->total_price }} RUB</div>
+                                </div>
+                            </div>
+                        @else
+                            <div class="empty-cart">No items yet</div>
+                        @endif
+                    </div>
                 </section>
             </div>
         </main>

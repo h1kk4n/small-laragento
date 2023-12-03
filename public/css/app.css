@@ -2,13 +2,32 @@
     font-family: 'Roboto', sans-serif;
     font-size: 14pt;
     margin: 40px auto;
-    width: 70%;
+    width: 75%;
+
+    display: flex;
+    gap: 10%;
+}
+
+.product-list {
+    flex-basis: 65%;
+}
+
+.cart {
+    flex-basis: 25%;
+}
+
+.product-list, .cart, .cart-items {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .product {
     padding: 20px;
     display: flex;
     justify-content: space-between;
+    border: 1px solid lightgrey;
+    border-radius: 20px;
 }
 
 .product-name {

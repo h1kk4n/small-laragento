@@ -13,6 +13,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index', ['products' => \App\Models\Product::all()]);
+Route::get('/', function (\Illuminate\Http\Request $request) {
+    if ($cartId = $request->cookie('cart_id')) {
+        $cart = \App\Models\Cart::find($cartId);
+    }
+    return view('index', [
+        'products' => \App\Models\Product::all(),
+        'cart'     => $cart ?? null
+    ]);
 });
