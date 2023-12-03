@@ -27,4 +27,5 @@ Route::controller(\App\Http\Controllers\CartController::class)
     ->prefix('/cart')
     ->group(function () {
         Route::post('/', 'store');
+        Route::put('/{id}', 'update');
     });

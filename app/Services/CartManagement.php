@@ -34,4 +34,17 @@ class CartManagement
         $cart->items()->save($cartItem);
         $cart->collectTotals();
     }
+
+    public function updateQty(Cart $cart, int $itemId, bool $increment): void
+    {
+        /** @var CartItem $item */
+        $item = $cart->items->keyBy(CartItem::ID)->get($itemId);
+        if (!$item) {
+            throw new \InvalidArgumentException("Cart item with id = {$itemId} not found");
+        }
+
+        $increment ? $item->qty++ : $item->qty--;
+        $item->save();
+        $cart->collectTotals();
+    }
 }
