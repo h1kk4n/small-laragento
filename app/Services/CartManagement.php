@@ -105,9 +105,9 @@ class CartManagement
 
     private function calculateTotalPrice(Cart $cart): void
     {
-        $cart->total_price = $cart->items->reduce(
-            fn (int $sum, CartItem $item) => $sum + $item->final_price,
+        $cart->total_price = round((float) $cart->items->reduce(
+            fn (float $sum, CartItem $item) => $sum + $item->final_price,
             0
-        );
+        ), 2);
     }
 }

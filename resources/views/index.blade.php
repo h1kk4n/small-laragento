@@ -63,9 +63,9 @@
                                             <div class="cart-item-price">
                                                 Price:
                                                 @if ($item->final_price < $item->base_price)
-                                                    <s class="old-price">{{ $item->base_price }}</s>
+                                                    <s class="old-price">{{ round($item->base_price, 2) }}</s>
                                                 @endif
-                                                {{ $item->final_price }} RUB
+                                                {{ round($item->final_price, 2) }} RUB
                                             </div>
                                         </div>
                                         <div class="cart-item-actions">
@@ -98,9 +98,9 @@
                                 <div class="cart-total-summary">
                                     <div class="cart-total-price">
                                         @if ($cart->base_total_price > $cart->total_price)
-                                            <s class="old-price">{{ $cart->base_total_price }}</s>
+                                            <s class="old-price">{{ round($cart->base_total_price, 2) }}</s>
                                         @endif
-                                        {{ $cart->total_price }} RUB
+                                        {{ round($cart->total_price, 2) }} RUB
                                     </div>
                                 </div>
                             </div>
