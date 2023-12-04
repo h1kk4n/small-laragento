@@ -1,5 +1,8 @@
 # Simple Laragento
 
+Small project implementing cart functional using Laravel.
+Also available on https://small-laragento.onrender.com/
+
 ## Local deploy
 
 ### Requirements
