@@ -9,6 +9,11 @@ use App\Models\Product;
 
 class CartManagement
 {
+    public function __construct(
+        private readonly DiscountApplier $discountApplier
+    ) {
+    }
+
     public function getCart(int $cartId = null): Cart
     {
         if ($cartId && $cart = Cart::find($cartId)) {
@@ -33,7 +38,7 @@ class CartManagement
         }
         $item->updatePrices();
         $cart->items()->save($item);
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function updateQty(Cart $cart, int $itemId, bool $increment): void
@@ -52,7 +57,7 @@ class CartManagement
         } else {
             $item->delete();
         }
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function removeItem(Cart $cart, int $itemId): void
@@ -63,11 +68,36 @@ class CartManagement
             throw new \InvalidArgumentException("Cart item with id = {$itemId} not found");
         }
         $item->delete();
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function placeOrder(Cart $cart): void
     {
         $cart->delete(); // Properly it should create order from cart, but the point is cart logic
+    }
+
+    public function collectTotals(Cart $cart): void
+    {
+        $this->discountApplier->applyRules($cart);
+        $this->calculateTotals($cart);
+        $cart->save();
+    }
+
+    private function calculateTotals(Cart $cart): void
+    {
+        $cart->refresh();
+
+        $totalQty = 0;
+        $totalBasePrice = 0;
+        $totalPrice = 0;
+        foreach ($cart->items as $item) {
+            $totalQty += $item->qty;
+            $totalBasePrice += $item->base_price;
+            $totalPrice += $item->final_price;
+        }
+
+        $cart->total_qty = $totalQty;
+        $cart->base_total_price = $totalBasePrice;
+        $cart->total_price = $totalPrice;
     }
 }
