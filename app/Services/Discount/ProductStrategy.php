@@ -11,12 +11,12 @@ class ProductStrategy implements ApplyingStrategyInterface
 {
     public function canApply(Cart $cart, Discount $discount): bool
     {
-        return $cart->items->find($discount->conditions['product_id']) !== null;
+        return $cart->items->keyBy(CartItem::PRODUCT_ID)->get($discount->conditions['product_id']) !== null;
     }
 
     public function apply(Cart $cart, Discount $discount): void
     {
-        $item = $cart->items->find($discount->conditions['product_id']);
+        $item = $cart->items->keyBy(CartItem::PRODUCT_ID)->get($discount->conditions['product_id']);
         $this->applyToItem($item, $discount);
     }
 

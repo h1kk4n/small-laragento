@@ -17,7 +17,6 @@ class DiscountApplier
 
     public function applyRules(Cart $cart): void
     {
-        $cart->refresh();
         foreach ($cart->items as $item) {
             $item->final_price = $item->base_price;
         }
@@ -30,9 +29,5 @@ class DiscountApplier
             }
             $applyingStrategy->apply($cart, $discount);
         }
-
-        $cart->items->map(
-            fn (CartItem $cartItem) => $cartItem->save()
-        );
     }
 }

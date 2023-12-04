@@ -60,7 +60,13 @@
                                     <div class="cart-item">
                                         <div class="cart-item-info">
                                             <div class="cart-item-name">{{ $item->product->name }}</div>
-                                            <div class="cart-item-price">Price: {{ $item->final_price }} RUB</div>
+                                            <div class="cart-item-price">
+                                                Price:
+                                                @if ($item->final_price < $item->base_price)
+                                                    <s class="old-price">{{ $item->base_price }}</s>
+                                                @endif
+                                                {{ $item->final_price }} RUB
+                                            </div>
                                         </div>
                                         <div class="cart-item-actions">
                                             <form method="POST" action="/cart/{{ $item->id }}">
@@ -90,7 +96,12 @@
                                     <div class="cart-total-qty">Total: {{ $cart->total_qty }} items</div>
                                 </div>
                                 <div class="cart-total-summary">
-                                    <div class="cart-total-price">{{ $cart->total_price }} RUB</div>
+                                    <div class="cart-total-price">
+                                        @if ($cart->base_total_price > $cart->total_price)
+                                            <s class="old-price">{{ $cart->base_total_price }}</s>
+                                        @endif
+                                        {{ $cart->total_price }} RUB
+                                    </div>
                                 </div>
                             </div>
                             <div class="place-order-block">

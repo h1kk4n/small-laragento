@@ -78,26 +78,36 @@ class CartManagement
 
     public function collectTotals(Cart $cart): void
     {
+        $cart->refresh();
+        $this->calculateBaseTotals($cart);
         $this->discountApplier->applyRules($cart);
-        $this->calculateTotals($cart);
+        $this->calculateTotalPrice($cart);
+
+        $cart->items->map(
+            fn (CartItem $cartItem) => $cartItem->save()
+        );
         $cart->save();
     }
 
-    private function calculateTotals(Cart $cart): void
+    private function calculateBaseTotals(Cart $cart): void
     {
-        $cart->refresh();
-
         $totalQty = 0;
         $totalBasePrice = 0;
-        $totalPrice = 0;
+
         foreach ($cart->items as $item) {
             $totalQty += $item->qty;
             $totalBasePrice += $item->base_price;
-            $totalPrice += $item->final_price;
         }
 
         $cart->total_qty = $totalQty;
         $cart->base_total_price = $totalBasePrice;
-        $cart->total_price = $totalPrice;
+    }
+
+    private function calculateTotalPrice(Cart $cart): void
+    {
+        $cart->total_price = $cart->items->reduce(
+            fn (int $sum, CartItem $item) => $sum + $item->final_price,
+            0
+        );
     }
 }

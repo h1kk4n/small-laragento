@@ -88,3 +88,7 @@
 .place-order-block {
     align-self: center;
 }
+
+.old-price {
+    color: grey;
+}
