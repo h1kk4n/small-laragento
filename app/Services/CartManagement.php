@@ -9,6 +9,11 @@ use App\Models\Product;
 
 class CartManagement
 {
+    public function __construct(
+        private readonly DiscountApplier $discountApplier
+    ) {
+    }
+
     public function getCart(int $cartId = null): Cart
     {
         if ($cartId && $cart = Cart::find($cartId)) {
@@ -33,7 +38,7 @@ class CartManagement
         }
         $item->updatePrices();
         $cart->items()->save($item);
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function updateQty(Cart $cart, int $itemId, bool $increment): void
@@ -52,7 +57,7 @@ class CartManagement
         } else {
             $item->delete();
         }
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function removeItem(Cart $cart, int $itemId): void
@@ -63,11 +68,46 @@ class CartManagement
             throw new \InvalidArgumentException("Cart item with id = {$itemId} not found");
         }
         $item->delete();
-        $cart->collectTotals();
+        $this->collectTotals($cart);
     }
 
     public function placeOrder(Cart $cart): void
     {
         $cart->delete(); // Properly it should create order from cart, but the point is cart logic
+    }
+
+    public function collectTotals(Cart $cart): void
+    {
+        $cart->refresh();
+        $this->calculateBaseTotals($cart);
+        $this->discountApplier->applyRules($cart);
+        $this->calculateTotalPrice($cart);
+
+        $cart->items->map(
+            fn (CartItem $cartItem) => $cartItem->save()
+        );
+        $cart->save();
+    }
+
+    private function calculateBaseTotals(Cart $cart): void
+    {
+        $totalQty = 0;
+        $totalBasePrice = 0;
+
+        foreach ($cart->items as $item) {
+            $totalQty += $item->qty;
+            $totalBasePrice += $item->base_price;
+        }
+
+        $cart->total_qty = $totalQty;
+        $cart->base_total_price = $totalBasePrice;
+    }
+
+    private function calculateTotalPrice(Cart $cart): void
+    {
+        $cart->total_price = $cart->items->reduce(
+            fn (int $sum, CartItem $item) => $sum + $item->final_price,
+            0
+        );
     }
 }

@@ -2,6 +2,7 @@
 /**
  * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Product> $products
  * @var \App\Models\Cart|null $cart
+ * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Discount $discounts
  */
 @endphp
 
@@ -24,7 +25,7 @@
     <body>
         <main class="content">
             <div class="container">
-                <section class="product-list">
+                <section class="main-content">
                     <h3>Product list:</h3>
                     @if (!$products->isEmpty())
                         @foreach ($products as $product)
@@ -50,7 +51,7 @@
                         <div class="no-products">No products yet</div>
                     @endif
                 </section>
-                <section class="cart">
+                <section class="sidebar">
                     <h3 class="cart-header">Your cart:</h3>
                     <div class="cart-container">
                         @if ($cart?->items->count())
@@ -59,7 +60,13 @@
                                     <div class="cart-item">
                                         <div class="cart-item-info">
                                             <div class="cart-item-name">{{ $item->product->name }}</div>
-                                            <div class="cart-item-price">Price: {{ $item->final_price }} RUB</div>
+                                            <div class="cart-item-price">
+                                                Price:
+                                                @if ($item->final_price < $item->base_price)
+                                                    <s class="old-price">{{ $item->base_price }}</s>
+                                                @endif
+                                                {{ $item->final_price }} RUB
+                                            </div>
                                         </div>
                                         <div class="cart-item-actions">
                                             <form method="POST" action="/cart/{{ $item->id }}">
@@ -89,7 +96,12 @@
                                     <div class="cart-total-qty">Total: {{ $cart->total_qty }} items</div>
                                 </div>
                                 <div class="cart-total-summary">
-                                    <div class="cart-total-price">{{ $cart->total_price }} RUB</div>
+                                    <div class="cart-total-price">
+                                        @if ($cart->base_total_price > $cart->total_price)
+                                            <s class="old-price">{{ $cart->base_total_price }}</s>
+                                        @endif
+                                        {{ $cart->total_price }} RUB
+                                    </div>
                                 </div>
                             </div>
                             <div class="place-order-block">
@@ -102,6 +114,15 @@
                             <div class="empty-cart">No items yet</div>
                         @endif
                     </div>
+                    <hr>
+                    @if ($discounts->count())
+                        <div class="rules-container">
+                            <h3 class="rules-header">Available discounts:</h3>
+                        </div>
+                        @foreach ($discounts as $discount)
+                            <div class="rule-item">{{ $discount->getName() }}</div>
+                        @endforeach
+                    @endif
                 </section>
             </div>
         </main>

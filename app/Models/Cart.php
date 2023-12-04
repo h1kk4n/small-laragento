@@ -34,20 +34,4 @@ class Cart extends Model
     {
         return $this->hasMany(CartItem::class);
     }
-
-    public function collectTotals(): void
-    {
-        $this->refresh();
-
-        $totalQty = 0;
-        $totalPrice = 0;
-        foreach ($this->items as $item) {
-            $totalQty += $item->qty;
-            $totalPrice += $item->final_price;
-        }
-
-        $this->total_qty = $totalQty;
-        $this->total_price = $totalPrice;
-        $this->save();
-    }
 }
