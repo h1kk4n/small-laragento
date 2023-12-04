@@ -18,8 +18,9 @@ Route::get('/', function (\Illuminate\Http\Request $request) {
         $cart = \App\Models\Cart::find($cartId);
     }
     return view('index', [
-        'products' => \App\Models\Product::all(),
-        'cart'     => $cart ?? null
+        'products'  => \App\Models\Product::all(),
+        'cart'      => $cart ?? null,
+        'discounts' => \App\Models\Discount::all()
     ]);
 });
 

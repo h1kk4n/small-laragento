@@ -2,6 +2,7 @@
 /**
  * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Product> $products
  * @var \App\Models\Cart|null $cart
+ * @var \Illuminate\Database\Eloquent\Collection<\App\Models\Discount $discounts
  */
 @endphp
 
@@ -24,7 +25,7 @@
     <body>
         <main class="content">
             <div class="container">
-                <section class="product-list">
+                <section class="main-content">
                     <h3>Product list:</h3>
                     @if (!$products->isEmpty())
                         @foreach ($products as $product)
@@ -50,7 +51,7 @@
                         <div class="no-products">No products yet</div>
                     @endif
                 </section>
-                <section class="cart">
+                <section class="sidebar">
                     <h3 class="cart-header">Your cart:</h3>
                     <div class="cart-container">
                         @if ($cart?->items->count())
@@ -102,6 +103,15 @@
                             <div class="empty-cart">No items yet</div>
                         @endif
                     </div>
+                    <hr>
+                    @if ($discounts->count())
+                        <div class="rules-container">
+                            <h3 class="rules-header">Available discounts:</h3>
+                        </div>
+                        @foreach ($discounts as $discount)
+                            <div class="rule-item">{{ $discount->getName() }}</div>
+                        @endforeach
+                    @endif
                 </section>
             </div>
         </main>

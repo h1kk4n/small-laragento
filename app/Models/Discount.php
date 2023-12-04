@@ -42,9 +42,9 @@ class Discount extends Model
         $cartTotal = $this->conditions['cart_total'] ?? null;
         $percent = $this->discount_percent;
         return match ($this->type) {
-            Discount::TYPE_PRODUCT  => "Discount {$percent}% for {$product->name} (SKU: {$product->sku})",
+            Discount::TYPE_PRODUCT  => "Discount {$percent}% for SKU: {$product->sku}",
             Discount::TYPE_CART     => "Discount {$percent}% when buying for {$cartTotal}",
-            Discount::TYPE_COMBINED => "Discount {$percent}% when buying {$product->name} (SKU: {$product->sku})"
+            Discount::TYPE_COMBINED => "Discount {$percent}% when buying SKU: {$product->sku}"
                                        . " with other products for {$cartTotal}",
             default => '',
         };
