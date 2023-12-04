@@ -12,7 +12,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $product_id
  * @property Product $product
  * @property int $qty
- * @property int $final_price
+ * @property float $single_price
+ * @property float $base_price
+ * @property float $final_price
  */
 class CartItem extends Model
 {
@@ -22,6 +24,8 @@ class CartItem extends Model
         CART_ID = 'cart_id',
         PRODUCT_ID = 'product_id',
         QTY = 'qty',
+        SINGLE_PRICE = 'single_price',
+        BASE_PRICE = 'base_price',
         FINAL_PRICE = 'final_price';
 
     protected $table = self::TABLE;
@@ -38,5 +42,10 @@ class CartItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function updatePrices(): void
+    {
+        $this->base_price = $this->final_price = $this->single_price * $this->qty;
     }
 }

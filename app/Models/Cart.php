@@ -10,7 +10,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property int $id
  * @property Collection<CartItem> $items
  * @property int $total_qty
- * @property int $total_price
+ * @property float $base_total_price
+ * @property float $total_price
  */
 class Cart extends Model
 {
@@ -18,12 +19,14 @@ class Cart extends Model
         TABLE = 'carts',
         ID = 'id',
         TOTAL_QTY = 'total_qty',
+        BASE_TOTAL_PRICE = 'base_total_price',
         TOTAL_PRICE = 'total_price';
 
     protected $table = self::TABLE;
     protected $primaryKey = self::ID;
     protected $attributes = [
         self::TOTAL_QTY => 0,
+        self::BASE_TOTAL_PRICE => 0,
         self::TOTAL_PRICE => 0
     ];
 
