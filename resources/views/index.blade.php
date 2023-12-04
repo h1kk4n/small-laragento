@@ -114,7 +114,6 @@
                             <div class="empty-cart">No items yet</div>
                         @endif
                     </div>
-                    <hr>
                     @if ($discounts->count())
                         <div class="rules-container">
                             <h3 class="rules-header">Available discounts:</h3>

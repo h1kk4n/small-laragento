@@ -25,6 +25,7 @@ $ docker-compose up -d
 $ php artian serve
 ```
 
-### Console commands
+### Console commands for developing
 
-- ***php artisan laragento:generate:products*** - generate 20 random products in database 
+- ***php artisan laragento:generate:products*** - seed database with 20 random products 
+- ***php artisan laragento:generate:discount*** - seed database with 5 random discounts 
